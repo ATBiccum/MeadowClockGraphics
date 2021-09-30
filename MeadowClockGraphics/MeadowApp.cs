@@ -40,6 +40,8 @@ namespace MeadowClockGraphics
         void DrawShapes()
         {
             Random rand = new Random();
+            int displayWidth = 128;
+            int displayHeight = 160;
 
             graphics.Clear(true);
 
