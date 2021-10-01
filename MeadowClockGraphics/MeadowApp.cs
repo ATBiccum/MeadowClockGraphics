@@ -67,8 +67,8 @@ namespace MeadowClockGraphics
             {
                 graphics.DrawRectangle
                 (
-                    xLeft: (displayWidth - sideLength) / 2,
-                    yTop: (displayHeight - sideLength) / 2,
+                    x: (displayWidth - sideLength) / 2,
+                    y: (displayHeight - sideLength) / 2,
                     width: sideLength,
                     height: sideLength,
                     color: Color.FromRgb(
