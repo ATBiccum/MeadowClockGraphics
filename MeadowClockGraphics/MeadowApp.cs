@@ -32,21 +32,36 @@ namespace MeadowClockGraphics
                 chipSelectPin: Device.Pins.D02,
                 dcPin: Device.Pins.D01,
                 resetPin: Device.Pins.D00,
-                width: 128, height: 160
+                width: 128, height: 160, St7735.DisplayType.ST7735R //Added from meadow website to bug test
             );
             displayWidth = Convert.ToInt32(st7735.Width);
             displayHeight = Convert.ToInt32(st7735.Height);
 
-            graphics = new GraphicsLibrary(st7735);
+            var graphics = new GraphicsLibrary(st7735); //Added VAR at the start for bug testing
             graphics.Rotation = GraphicsLibrary.RotationType._270Degrees;
 
             led.SetColor(RgbLed.Colors.Green);
-
-            DrawShapes();            
+            DrawShapesTest();
+            //DrawShapes();            
             //DrawTexts();
             //DrawClock();
         }
+        void DrawShapesTest()
+        {
+            graphics.Clear();
 
+            graphics.DrawCircle(60, 60, 20, Color.Purple);
+            graphics.DrawRectangle(10, 10, 30, 60, Color.Red);
+            graphics.DrawTriangle(20, 20, 10, 70, 60, 60, Color.Green);
+
+            graphics.DrawCircle(90, 60, 20, Color.Cyan, true);
+            graphics.DrawRectangle(100, 100, 30, 10, Color.Yellow, true);
+            graphics.DrawTriangle(120, 20, 110, 70, 160, 60, Color.Pink, true);
+
+            graphics.DrawLine(10, 120, 110, 130, Color.SlateGray);
+
+            graphics.Show();
+        }
         void DrawShapes()
         {
             Random rand = new Random();
@@ -67,7 +82,7 @@ namespace MeadowClockGraphics
                     color: Color.FromRgb(rand.Next(128, 255), rand.Next(128, 255), rand.Next(128, 255))
                 );
                 graphics.Show();
-                radius += 30;
+                radius += 10;       //Changed from 30 to 10 to adjust for smaller screen
             }
 
             int sideLength = 30;
@@ -82,7 +97,7 @@ namespace MeadowClockGraphics
                     color: Color.FromRgb(rand.Next(128, 255), rand.Next(128, 255), rand.Next(128, 255))
                 );
                 graphics.Show();
-                sideLength += 60;
+                sideLength += 10;   //Changed from 60 to 10 to adjust for smaller screen
             }
 
             graphics.DrawLine(0, displayHeight / 2, displayWidth, displayHeight / 2,
@@ -95,7 +110,7 @@ namespace MeadowClockGraphics
                 Color.FromRgb(rand.Next(128, 255), rand.Next(128, 255), rand.Next(128, 255)));
             graphics.Show();
 
-            //Thread.Sleep(5000);
+            Thread.Sleep(5000);
         }
 
         void DrawTexts()
