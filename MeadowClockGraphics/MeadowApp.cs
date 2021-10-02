@@ -7,11 +7,14 @@
  * 
  * Progression notes:
  * 
+ * DrawShapesTest Function -
  * ST7735 screen would not display circles in appropririate centered resolution from function DrawShapes().
  * Solution: Added the code example http://developer.wildernesslabs.co/docs/api/Meadow.Foundation/Meadow.Foundation.Displays.TftSpi.St7735.html
  * under new function DrawShapesTest. Also, added updated screen information commented below.
  * 
- * 
+ * DrawShapes Function -
+ * Our shapes produced from this function are not centered. Previous function probably not centered either just can't tell because of random placement.
+ * Solution: 
  * 
  */
 
@@ -49,7 +52,7 @@ namespace MeadowClockGraphics
             st7735 = new St7735
             (
                 device: Device,
-                //spiBus: Device.CreateSpiBus(Device.Pins.SCK, Device.Pins.MOSI, Device.Pins.MISO, config),
+                //spiBus: Device.CreateSpiBus(Device.Pins.SCK, Device.Pins.MOSI, Device.Pins.MISO, config), //Old pinouts
                 spiBus: Device.CreateSpiBus(Device.Pins.SCK, Device.Pins.COPI, Device.Pins.CIPO, config),   //Changed MOSI and MISO To COPI and CIPO, new pin names
                 chipSelectPin: Device.Pins.D02,
                 dcPin: Device.Pins.D01,
@@ -91,8 +94,8 @@ namespace MeadowClockGraphics
             graphics.Clear(true);
 
             int radius = 10;
-            int originX = displayWidth / 2;
-            int originY = displayHeight / 2;
+            int originX = 64;
+            int originY = 80;
 
             for (int i = 1; i < 5; i++)
             {
@@ -104,7 +107,7 @@ namespace MeadowClockGraphics
                     color: Color.FromRgb(rand.Next(128, 255), rand.Next(128, 255), rand.Next(128, 255))
                 );
                 graphics.Show();
-                radius += 10;       //Changed from 30 to 10 to adjust for smaller screen
+                radius += 30;   
             }
 
             int sideLength = 30;
@@ -119,7 +122,7 @@ namespace MeadowClockGraphics
                     color: Color.FromRgb(rand.Next(128, 255), rand.Next(128, 255), rand.Next(128, 255))
                 );
                 graphics.Show();
-                sideLength += 10;   //Changed from 60 to 10 to adjust for smaller screen
+                sideLength += 60; 
             }
 
             graphics.DrawLine(0, displayHeight / 2, displayWidth, displayHeight / 2,
