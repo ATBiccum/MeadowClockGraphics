@@ -1,4 +1,25 @@
-﻿using Meadow;
+﻿/*MeadowClockGraphics project
+ * 
+ * Tony Biccum
+ * October 2nd, 2021
+ * Program written for ECET 230 course at Camosun College
+ * Based on https://github.com/WildernessLabs/Meadow_Project_Samples/tree/main/source/Hackster/MeadowClockGraphics 
+ * 
+ * Progression notes:
+ * 
+ * ST7735 screen would not display circles in appropririate centered resolution from function DrawShapes().
+ * Solution: Added the code example http://developer.wildernesslabs.co/docs/api/Meadow.Foundation/Meadow.Foundation.Displays.TftSpi.St7735.html
+ * under new function DrawShapesTest. Also, added updated screen information commented below.
+ * 
+ * 
+ * 
+ */
+
+
+
+
+
+using Meadow;
 using Meadow.Devices;
 using Meadow.Foundation;
 using Meadow.Foundation.Displays.TftSpi;
@@ -28,21 +49,22 @@ namespace MeadowClockGraphics
             st7735 = new St7735
             (
                 device: Device,
-                spiBus: Device.CreateSpiBus(Device.Pins.SCK, Device.Pins.MOSI, Device.Pins.MISO, config),
+                //spiBus: Device.CreateSpiBus(Device.Pins.SCK, Device.Pins.MOSI, Device.Pins.MISO, config),
+                spiBus: Device.CreateSpiBus(Device.Pins.SCK, Device.Pins.COPI, Device.Pins.CIPO, config),   //Changed MOSI and MISO To COPI and CIPO, new pin names
                 chipSelectPin: Device.Pins.D02,
                 dcPin: Device.Pins.D01,
                 resetPin: Device.Pins.D00,
-                width: 128, height: 160, St7735.DisplayType.ST7735R //Added from meadow website to bug test
+                width: 128, height: 160, St7735.DisplayType.ST7735R                                         //Added "St7735.DisplayType.ST7735R" from meadow website
             );
             displayWidth = Convert.ToInt32(st7735.Width);
             displayHeight = Convert.ToInt32(st7735.Height);
 
-            var graphics = new GraphicsLibrary(st7735); //Added VAR at the start for bug testing
+            graphics = new GraphicsLibrary(st7735); 
             graphics.Rotation = GraphicsLibrary.RotationType._270Degrees;
 
             led.SetColor(RgbLed.Colors.Green);
-            DrawShapesTest();
-            //DrawShapes();            
+            //DrawShapesTest();
+            DrawShapes();            
             //DrawTexts();
             //DrawClock();
         }
