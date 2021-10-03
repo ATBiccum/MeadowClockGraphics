@@ -37,7 +37,7 @@ namespace MeadowClockGraphics
     public class MeadowApp : App<F7Micro, MeadowApp>
     {
         readonly Color WatchBackgroundColor = Color.BlueViolet;
-        readonly Color WatchFaceColor = Color.Gray;
+
         St7735 st7735;
         GraphicsLibrary graphics;
         int displayWidth, displayHeight;
@@ -189,7 +189,7 @@ namespace MeadowClockGraphics
             graphics.DrawRectangle(5, 5, displayWidth - 10, displayHeight - 10, Color.White);
 
             graphics.CurrentFont = new Font8x12();
-            graphics.DrawCircle(xCenter, yCenter, 100, WatchFaceColor, true);
+            graphics.DrawCircle(xCenter, yCenter, 100, WatchBackgroundColor, true);
             for (int i = 0; i < 60; i++)
             {
                 x = (int)(xCenter + 40 * Math.Sin(i * Math.PI / 30));
