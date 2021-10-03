@@ -14,7 +14,7 @@
  * 
  * DrawShapes Function -
  * Our shapes produced from this function are not centered. Previous function probably not centered either just can't tell because of random placement.
- * Solution: 
+ * Solution: Found that we are trying to rotate the graphics so just commented that line out.
  * 
  */
 
@@ -36,8 +36,8 @@ namespace MeadowClockGraphics
 {
     public class MeadowApp : App<F7Micro, MeadowApp>
     {
-        readonly Color WatchBackgroundColor = Color.White;
-
+        readonly Color WatchBackgroundColor = Color.BlueViolet;
+        readonly Color WatchFaceColor = Color.Gray;
         St7735 st7735;
         GraphicsLibrary graphics;
         int displayWidth, displayHeight;
@@ -52,8 +52,8 @@ namespace MeadowClockGraphics
             st7735 = new St7735
             (
                 device: Device,
-                //spiBus: Device.CreateSpiBus(Device.Pins.SCK, Device.Pins.MOSI, Device.Pins.MISO, config), //Old pinouts
-                spiBus: Device.CreateSpiBus(Device.Pins.SCK, Device.Pins.COPI, Device.Pins.CIPO, config),   //Changed MOSI and MISO To COPI and CIPO, new pin names
+                spiBus: Device.CreateSpiBus(Device.Pins.SCK, Device.Pins.MOSI, Device.Pins.MISO, config), //Old pinouts
+                //spiBus: Device.CreateSpiBus(Device.Pins.SCK, Device.Pins.COPI, Device.Pins.CIPO, config),   //Changed MOSI and MISO To COPI and CIPO, new pin names
                 chipSelectPin: Device.Pins.D02,
                 dcPin: Device.Pins.D01,
                 resetPin: Device.Pins.D00,
@@ -63,13 +63,13 @@ namespace MeadowClockGraphics
             displayHeight = Convert.ToInt32(st7735.Height);
 
             graphics = new GraphicsLibrary(st7735); 
-            graphics.Rotation = GraphicsLibrary.RotationType._270Degrees;
+            //graphics.Rotation = GraphicsLibrary.RotationType._90Degrees;          //No rotation
 
             led.SetColor(RgbLed.Colors.Green);
             //DrawShapesTest();
-            DrawShapes();            
+            //DrawShapes();            
             //DrawTexts();
-            //DrawClock();
+            DrawClock();
         }
         void DrawShapesTest()
         {
@@ -94,8 +94,8 @@ namespace MeadowClockGraphics
             graphics.Clear(true);
 
             int radius = 10;
-            int originX = 64;
-            int originY = 80;
+            int originX = displayWidth / 2;
+            int originY = displayHeight / 2;
 
             for (int i = 1; i < 5; i++)
             {
@@ -146,7 +146,7 @@ namespace MeadowClockGraphics
             int spacing = 20;
             int y = 5;
 
-            graphics.CurrentFont = new Font12x16();
+            graphics.CurrentFont = new Font8x12();
             graphics.DrawText(indent, y, "Meadow F7 SPI ST7735!!");
             graphics.DrawText(indent, y += spacing, "Red", Color.Red);
             graphics.DrawText(indent, y += spacing, "Purple", Color.Purple);
@@ -188,12 +188,12 @@ namespace MeadowClockGraphics
             graphics.DrawRectangle(0, 0, displayWidth, displayHeight, Color.White);
             graphics.DrawRectangle(5, 5, displayWidth - 10, displayHeight - 10, Color.White);
 
-            graphics.CurrentFont = new Font12x20();
-            graphics.DrawCircle(xCenter, yCenter, 100, WatchBackgroundColor, true);
+            graphics.CurrentFont = new Font8x12();
+            graphics.DrawCircle(xCenter, yCenter, 100, WatchFaceColor, true);
             for (int i = 0; i < 60; i++)
             {
-                x = (int)(xCenter + 80 * Math.Sin(i * Math.PI / 30));
-                y = (int)(yCenter - 80 * Math.Cos(i * Math.PI / 30));
+                x = (int)(xCenter + 40 * Math.Sin(i * Math.PI / 30));
+                y = (int)(yCenter - 40 * Math.Cos(i * Math.PI / 30));
 
                 if (i % 5 == 0)
                 {
@@ -228,8 +228,8 @@ namespace MeadowClockGraphics
 
             //remove previous hour
             int previousHour = (hour - 1) < -1 ? 11 : (hour - 1);
-            x = (int)(xCenter + 43 * Math.Sin(previousHour * Math.PI / 6));
-            y = (int)(yCenter - 43 * Math.Cos(previousHour * Math.PI / 6));
+            x = (int)(xCenter + 23 * Math.Sin(previousHour * Math.PI / 6));
+            y = (int)(yCenter - 23 * Math.Cos(previousHour * Math.PI / 6));
             xT = (int)(xCenter + 3 * Math.Sin((previousHour - 3) * Math.PI / 6));
             yT = (int)(yCenter - 3 * Math.Cos((previousHour - 3) * Math.PI / 6));
             graphics.DrawLine(xT, yT, x, y, WatchBackgroundColor);
@@ -237,8 +237,8 @@ namespace MeadowClockGraphics
             yT = (int)(yCenter - 3 * Math.Cos((previousHour + 3) * Math.PI / 6));
             graphics.DrawLine(xT, yT, x, y, WatchBackgroundColor);
             //current hour
-            x = (int)(xCenter + 43 * Math.Sin(hour * Math.PI / 6));
-            y = (int)(yCenter - 43 * Math.Cos(hour * Math.PI / 6));
+            x = (int)(xCenter + 23 * Math.Sin(hour * Math.PI / 6));
+            y = (int)(yCenter - 23 * Math.Cos(hour * Math.PI / 6));
             xT = (int)(xCenter + 3 * Math.Sin((hour - 3) * Math.PI / 6));
             yT = (int)(yCenter - 3 * Math.Cos((hour - 3) * Math.PI / 6));
             graphics.DrawLine(xT, yT, x, y, Color.Black);
@@ -247,8 +247,8 @@ namespace MeadowClockGraphics
             graphics.DrawLine(xT, yT, x, y, Color.Black);
             //remove previous minute
             int previousMinute = minute - 1 < -1 ? 59 : (minute - 1);
-            x = (int)(xCenter + 55 * Math.Sin(previousMinute * Math.PI / 30));
-            y = (int)(yCenter - 55 * Math.Cos(previousMinute * Math.PI / 30));
+            x = (int)(xCenter + 30 * Math.Sin(previousMinute * Math.PI / 30));
+            y = (int)(yCenter - 30 * Math.Cos(previousMinute * Math.PI / 30));
             xT = (int)(xCenter + 3 * Math.Sin((previousMinute - 15) * Math.PI / 6));
             yT = (int)(yCenter - 3 * Math.Cos((previousMinute - 15) * Math.PI / 6));
             graphics.DrawLine(xT, yT, x, y, WatchBackgroundColor);
@@ -256,8 +256,8 @@ namespace MeadowClockGraphics
             yT = (int)(yCenter - 3 * Math.Cos((previousMinute + 15) * Math.PI / 6));
             graphics.DrawLine(xT, yT, x, y, WatchBackgroundColor);
             //current minute
-            x = (int)(xCenter + 55 * Math.Sin(minute * Math.PI / 30));
-            y = (int)(yCenter - 55 * Math.Cos(minute * Math.PI / 30));
+            x = (int)(xCenter + 30 * Math.Sin(minute * Math.PI / 30));
+            y = (int)(yCenter - 30 * Math.Cos(minute * Math.PI / 30));
             xT = (int)(xCenter + 3 * Math.Sin((minute - 15) * Math.PI / 6));
             yT = (int)(yCenter - 3 * Math.Cos((minute - 15) * Math.PI / 6));
             graphics.DrawLine(xT, yT, x, y, Color.Black);
@@ -266,14 +266,15 @@ namespace MeadowClockGraphics
             graphics.DrawLine(xT, yT, x, y, Color.Black);
             //remove previous second
             int previousSecond = second - 1 < -1 ? 59 : (second - 1);
-            x = (int)(xCenter + 70 * Math.Sin(previousSecond * Math.PI / 30));
-            y = (int)(yCenter - 70 * Math.Cos(previousSecond * Math.PI / 30));
+            x = (int)(xCenter + 34 * Math.Sin(previousSecond * Math.PI / 30));
+            y = (int)(yCenter - 34 * Math.Cos(previousSecond * Math.PI / 30));
             graphics.DrawLine(xCenter, yCenter, x, y, WatchBackgroundColor);
             //current second
-            x = (int)(xCenter + 70 * Math.Sin(second * Math.PI / 30));
-            y = (int)(yCenter - 70 * Math.Cos(second * Math.PI / 30));
+            x = (int)(xCenter + 34 * Math.Sin(second * Math.PI / 30));
+            y = (int)(yCenter - 34 * Math.Cos(second * Math.PI / 30));
             graphics.DrawLine(xCenter, yCenter, x, y, Color.Red);
             graphics.Show();
+
         }
     }
 }
