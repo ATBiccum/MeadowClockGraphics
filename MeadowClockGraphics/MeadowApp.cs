@@ -36,7 +36,7 @@ namespace MeadowClockGraphics
 {
     public class MeadowApp : App<F7Micro, MeadowApp>
     {
-        readonly Color WatchBackgroundColor = Color.BlueViolet;
+        readonly Color WatchBackgroundColor = Color.White;
 
         St7735 st7735;
         GraphicsLibrary graphics;
